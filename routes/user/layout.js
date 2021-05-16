@@ -8,7 +8,6 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    console.log(req.body)
     delete req.body.layout._id
     if (!req.body.layout){
         res.send(400)
@@ -21,11 +20,7 @@ router.post('/', async (req, res) => {
     console.log(user)
     if (req.body.isDefault){
         user.layoutMeta.defaultLayout = req.body.layout._id
-        user = await UserModel.findByIdAndUpdate(
-            req.userId, 
-            {layoutMeta: user.layoutMeta},
-            {new: true}
-        )
+        user.save()
     }
     console.log(user.layoutMeta)
     res.json(user.layoutMeta)
@@ -35,11 +30,41 @@ router.get('/:layoutId', async (req, res) => {
     const user = await UserModel.findOne({
         _id: req.userId
     })
-    let layout = user.layoutMeta.layouts.id(req.params.layoutId)
+    let layout = user?.layoutMeta?.layouts?.id(req.params.layoutId)
     if (!layout){
         return res.sendStatus(404)
     }
     return res.json(layout)
+})
+
+
+router.put('/:layoutId', async (req, res) => {
+    console.log(req.body)
+    if(!req.body?.layout){
+        return res.sendStatus(400)
+    }
+
+    const user = await UserModel.findOneAndUpdate({
+        _id: req.userId,
+        "layoutMeta.layouts._id" : req.body.layout._id
+    },
+    {
+        "$set" : {
+            "layoutMeta.layouts.$" : req.body.layout
+        }
+    },
+    {new: true})
+
+    if (!user){
+        return res.sendStatus(404)
+    }
+
+    if (req.body.isDefault){
+        user.layoutMeta.defaultLayout = req.body.layout._id
+        await user.save()
+    }
+
+    return res.json(user.layoutMeta)
 })
 
 router.delete('/:layoutId', async (req, res) => {
