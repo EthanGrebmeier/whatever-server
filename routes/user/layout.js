@@ -17,12 +17,6 @@ router.post('/', async (req, res) => {
         {$push: {"layoutMeta.layouts": req.body.layout}},
         {new: true}
     )
-    console.log(user)
-    if (req.body.isDefault){
-        user.layoutMeta.defaultLayout = req.body.layout._id
-        user.save()
-    }
-    console.log(user.layoutMeta)
     res.json(user.layoutMeta)
 }) 
 
