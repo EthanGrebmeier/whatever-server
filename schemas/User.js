@@ -9,14 +9,18 @@ const UserSchema = new mongoose.Schema({
     lastName: String,
     settings: {
         background: String,
-    }, 
+    },
     layoutMeta: {
         defaultLayout: String,
         layouts: {type: [Layout], default: []}
     },
     appletMeta: {
         checklist: {
-            items: [ChecklistItem]
+            items: {type: [ChecklistItem], default: []}
+        }, 
+        notepad: {
+            title: {type: String, default: ''},
+            text: {type: String, default: ''}
         }
     }
 
