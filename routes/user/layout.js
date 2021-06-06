@@ -72,6 +72,11 @@ router.delete('/:layoutId', async (req, res) => {
         return res.sendStatus(404)
     }
 
+    if (user.layoutMeta.defaultLayout == req.params.layoutId){
+        user.layoutMeta.defaultLayout == ''
+        await user.save()
+    }
+
     return res.json(user.layoutMeta)
 })
 
