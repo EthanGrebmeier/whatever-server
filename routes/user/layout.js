@@ -8,10 +8,12 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    delete req.body.layout._id
     if (!req.body.layout){
         res.send(400)
     }
+    
+    delete req.body.layout._id
+    
     let user = await UserModel.findByIdAndUpdate(
         req.userId, 
         {$push: {"layoutMeta.layouts": req.body.layout}},
