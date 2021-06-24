@@ -5,7 +5,8 @@ const AppletSchema = new mongoose.Schema({
     id: String,
     height: String,
     width: String,
-    position: String
+    position: String,
+    background: String
 })
 
 
