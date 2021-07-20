@@ -7,7 +7,7 @@ async function getAccessToken(req, res, next){
         if (reqAccessToken == null){return res.sendStatus(401)}
         jwt.verify(reqAccessToken, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
             if (err) {return res.sendStatus(401)}
-            req.userId = user.id
+            req.userID = user.id
             next()
         })
     } catch (e){

@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 router.get('/', async (req, res) => {
-    const user = await UserModel.findById(req.userId).lean()
+    const user = await UserModel.findByID(req.userID).lean()
     console.log(user)
     if (!user?.appletMeta?.notepad) {
         return res.sendStatus(404)
@@ -21,8 +21,8 @@ router.post('/', async (req, res) => {
 
     console.log(parsedNotepad)
 
-    const user = await UserModel.findByIdAndUpdate(
-        req.userId, 
+    const user = await UserModel.findByIDAndUpdate(
+        req.userID, 
         {
             'appletMeta.notepad' : parsedNotepad
         }, 
