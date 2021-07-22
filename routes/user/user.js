@@ -3,7 +3,7 @@ const router = express.Router();
 const UserModel = require('../../schemas/User')
 
 router.get('/', async (req, res) => {
-    const user = await UserModel.findByID(req.userID).lean()
+    const user = await UserModel.findById(req.userID).lean()
     console.log(user)
     return res.json(user)
 })
