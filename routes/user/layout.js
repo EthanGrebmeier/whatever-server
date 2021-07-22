@@ -3,7 +3,7 @@ const router = express.Router();
 const UserModel = require('../../schemas/User')
 
 router.get('/', async (req, res) => {
-    const user = await UserModel.findByID(req.userID).lean()
+    const user = await UserModel.findById(req.userID).lean()
     return res.json(user.layoutMeta)
 })
 
@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
     
     delete req.body.layout._id
     
-    let user = await UserModel.findByIDAndUpdate(
+    let user = await UserModel.findByIdAndUpdate(
         req.userID, 
         {$push: {"layoutMeta.layouts": req.body.layout}},
         {new: true}
@@ -64,7 +64,7 @@ router.put('/:layoutID', async (req, res) => {
 })
 
 router.delete('/:layoutID', async (req, res) => {
-    let user = await UserModel.findByIDAndUpdate(
+    let user = await UserModel.findByIdAndUpdate(
         req.userID, 
         {$pull: {"layoutMeta.layouts": {_id: req.params.layoutID}}},
         {new: true}
