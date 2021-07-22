@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Layout = require('./Layout.js')
-const ChecklistItem = require('./applets/checklist/ChecklistItem')
+const Checklist = require('./applets/checklist/Checklist.js');
 
 const UserSchema = new mongoose.Schema({
     email: String,
@@ -15,9 +15,7 @@ const UserSchema = new mongoose.Schema({
         layouts: {type: [Layout], default: []}
     },
     appletMeta: {
-        checklist: {
-            items: {type: [ChecklistItem], default: []}
-        }, 
+        checklist: {type: [Checklist], default: []}, 
         notepad: {
             title: {type: String, default: ''},
             text: {type: String, default: ''}

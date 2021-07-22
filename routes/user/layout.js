@@ -3,7 +3,7 @@ const router = express.Router();
 const UserModel = require('../../schemas/User')
 
 router.get('/', async (req, res) => {
-    const user = await UserModel.findById(req.userId).lean()
+    const user = await UserModel.findById(req.userID).lean()
     return res.json(user.layoutMeta)
 })
 
@@ -15,18 +15,18 @@ router.post('/', async (req, res) => {
     delete req.body.layout._id
     
     let user = await UserModel.findByIdAndUpdate(
-        req.userId, 
+        req.userID, 
         {$push: {"layoutMeta.layouts": req.body.layout}},
         {new: true}
     )
     res.json(user.layoutMeta)
 }) 
 
-router.get('/:layoutId', async (req, res) => {
+router.get('/:layoutID', async (req, res) => {
     const user = await UserModel.findOne({
-        _id: req.userId
+        _id: req.userID
     })
-    let layout = user?.layoutMeta?.layouts?.id(req.params.layoutId)
+    let layout = user?.layoutMeta?.layouts?.id(req.params.layoutID)
     if (!layout){
         return res.sendStatus(404)
     }
@@ -34,14 +34,14 @@ router.get('/:layoutId', async (req, res) => {
 })
 
 
-router.put('/:layoutId', async (req, res) => {
+router.put('/:layoutID', async (req, res) => {
     console.log(req.body)
     if(!req.body?.layout){
         return res.sendStatus(400)
     }
 
     const user = await UserModel.findOneAndUpdate({
-        _id: req.userId,
+        _id: req.userID,
         "layoutMeta.layouts._id" : req.body.layout._id
     },
     {
@@ -63,10 +63,10 @@ router.put('/:layoutId', async (req, res) => {
     return res.json(user.layoutMeta)
 })
 
-router.delete('/:layoutId', async (req, res) => {
+router.delete('/:layoutID', async (req, res) => {
     let user = await UserModel.findByIdAndUpdate(
-        req.userId, 
-        {$pull: {"layoutMeta.layouts": {_id: req.params.layoutId}}},
+        req.userID, 
+        {$pull: {"layoutMeta.layouts": {_id: req.params.layoutID}}},
         {new: true}
     )
 
@@ -74,7 +74,7 @@ router.delete('/:layoutId', async (req, res) => {
         return res.sendStatus(404)
     }
 
-    if (user.layoutMeta.defaultLayout == req.params.layoutId){
+    if (user.layoutMeta.defaultLayout == req.params.layoutID){
         user.layoutMeta.defaultLayout == ''
         await user.save()
     }
