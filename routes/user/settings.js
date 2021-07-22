@@ -3,12 +3,12 @@ const router = express.Router();
 const UserModel = require('../../schemas/User')
 
 router.get('/background', async (req, res) => {
-    const user = await UserModel.findByID(req.userID).lean()
+    const user = await UserModel.findById(req.userID).lean()
     return res.json(user.settings.background)
 })
 
 router.post('/background', async (req, res) => {
-    let user = await UserModel.findByIDAndUpdate(
+    let user = await UserModel.findByIdAndUpdate(
         req.userID, 
         {"settings.background" : req.body.background},
         {new: true}
